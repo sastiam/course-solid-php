@@ -1,0 +1,19 @@
+{
+    "name": "sastiam/course-solid",
+    "description": "Reinforce knowledge in principles solid with php",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Sastiam\\CourseSolid\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sastiam",
+            "email": "sfranciach@gmail.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*"
+    }
+}
