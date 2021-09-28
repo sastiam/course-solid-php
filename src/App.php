@@ -37,7 +37,7 @@ class App implements IApp {
             $loadEnvDatabase = $this->environment->getEnvironment("MYSQL_CREDENTIALS");
             $connectDatabase = new MysqlConnection($loadEnvDatabase);
 
-            echo $connectDatabase;
+            // echo var_dump($connectDatabase);
             return "Database connected!";
         } catch (\Exception $e) {
             return $e->getMessage();
