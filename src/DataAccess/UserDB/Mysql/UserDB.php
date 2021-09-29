@@ -2,13 +2,14 @@
 
 use Exception;
 use PDO;
+use Sastiam\CourseSolid\DataAccess\Interfaces\IReadable;
+use Sastiam\CourseSolid\DataAccess\Interfaces\IWriteable;
 use Sastiam\CourseSolid\Db\Mysql\DBConnectionInterface;
 use Sastiam\CourseSolid\Models\User\UserModel;
-use Sastiam\CourseSolid\DataAccess\UserDB\Mysql\UserDBInterface;
 use Sastiam\CourseSolid\Utils\Logger;
 
 
-class UserDB implements UserDBInterface {
+class UserDB implements IReadable, IWriteable {
 
     /**
      * @var PDO
@@ -24,29 +25,43 @@ class UserDB implements UserDBInterface {
         $this->logger = new Logger();
     }
 
-    /**
-     * @return array
-     * @throws Exception
-     */
-    public function all() : array {
-        $stmt = $this->dbConnection->prepare("SELECT * FROM users");
-        $stmt->execute();
-        $res=$stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo $this->logger->success()->format("Ejecutando listado de Usuarios");
-        return $res;
+
+    public function get(int $id)
+    {
+        // TODO: Implement get() method.
     }
 
     /**
-     * @param UserModel $userModel
-     * @return string
      * @throws Exception
      */
-    public function store(UserModel $userModel): string
+    public function getAll(): bool| array
     {
-        // TODO: Implement store() method.
+        // TODO: Implement getAll() method.
+        $stmt = $this->dbConnection->prepare("SELECT * FROM users");
+        $stmt->execute();
+        $res=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo $this->logger->inProcess()->format("Get all users...");
+        $array = [];
+        foreach ($res as $user) {
+            $array[] = new UserModel($user['id'], new \DateTime($user['updatedAt']), $user['firstName'], $user['lastName']);
+        }
+        return $array;
+    }
+
+    public function update(int $id, object $obj)
+    {
+        // TODO: Implement update() method.
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function create(object $obj): string
+    {
+        // TODO: Implement create() method.
         $stmt = $this->dbConnection->prepare("INSERT INTO users(firstName, lastName) VALUES (:firstName, :lastName)");
-        $firstName = $userModel->getFirstName();
-        $lastName = $userModel->getLastName();
+        $firstName = $obj->getFirstName();
+        $lastName = $obj->getLastName();
         $stmt->bindParam(":firstName", $firstName);
         $stmt->bindParam(":lastName", $lastName);
         $stmt->execute();
