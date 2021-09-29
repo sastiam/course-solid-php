@@ -1,11 +1,17 @@
 <?php namespace Sastiam\CourseSolid\Config;
 
+use Exception;
+
 class Environment implements EnvironmentInterface {
 
+    /**
+     * @var array
+     */
     private array $configEnvironment = [];
 
     /**
-     * @throws \Exception
+     * @param string $env
+     * @return array
      */
     public function getEnvironment(string $env) : array
     {
@@ -16,6 +22,11 @@ class Environment implements EnvironmentInterface {
         return $this->configEnvironment[$env];
     }
 
+    /**
+     * @param string $env
+     * @param array $environment
+     * @return bool
+     */
     public function setEnvironment(string $env, array $environment): bool
     {
         $this->configEnvironment[$env] = $environment;
@@ -23,6 +34,10 @@ class Environment implements EnvironmentInterface {
         return true;
     }
 
+    /**
+     * @param string $env
+     * @return bool
+     */
     public function checkEnvironment(string $env): bool
     {
       return in_array($env, $this->configEnvironment);

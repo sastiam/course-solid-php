@@ -4,25 +4,18 @@ namespace Sastiam\CourseSolid\Utils;
 
 use Exception;
 
-interface LoggerInterface {
-    public function format(string $string) : string;
-    public function success();
-    public function failed();
-    public function inProcess();
-}
-
-abstract class LoggerType {
-    const SUCCESS = "green";
-    const FAILED = "red";
-    const IN_PROCESS = "yellow";
-}
-
 
 class Logger implements LoggerInterface {
 
     private ColorsLogger $colorsLogger;
+    /**
+     * @var string
+     */
     private string $loggerType;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->colorsLogger = new ColorsLogger();
@@ -39,6 +32,9 @@ class Logger implements LoggerInterface {
         return $this->colorsLogger->execute("font", $this->loggerType, $string."\n");
     }
 
+    /**
+     * @return $this
+     */
     public function success(): static
     {
         // TODO: Implement success() method.
@@ -47,6 +43,9 @@ class Logger implements LoggerInterface {
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function failed(): static
     {
         // TODO: Implement failed() method.
@@ -54,6 +53,9 @@ class Logger implements LoggerInterface {
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function inProcess(): static
     {
         // TODO: Implement inProcess() method.

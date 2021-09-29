@@ -2,15 +2,11 @@
 namespace Sastiam\CourseSolid\Utils;
 use Exception;
 
-/**
- * Color escapes for bash output
- */
-interface ColorsLoggerInterface {
-    public function execute($type, $color, $string) : string;
-}
-
 class ColorsLogger implements ColorsLoggerInterface
 {
+    /**
+     * @var array|string[]
+     */
     private static array $foreground = array(
         'black' => '0;30',
         'dark_gray' => '1;30',
@@ -30,6 +26,9 @@ class ColorsLogger implements ColorsLoggerInterface
         'bold_gray' => '0;37',
     );
 
+    /**
+     * @var array|string[]
+     */
     private static array $background = array(
         'black' => '40',
         'red' => '41',
@@ -75,6 +74,12 @@ class ColorsLogger implements ColorsLoggerInterface
         return "\033[" . self::$background[$color] . 'm' . $string . "\033[0m";
     }
 
+    /**
+     * @param $type
+     * @param $color
+     * @param $string
+     * @return string
+     */
     public function execute($type, $color, $string) : string {
         return call_user_func(array(self::class, $type), $color, $string);
     }

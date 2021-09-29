@@ -5,5 +5,8 @@ use PDO;
 
 interface DBConnectionInterface
 {
+    /**
+     * @return PDO
+     */
     public function connect(): PDO;
 }
