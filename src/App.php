@@ -12,31 +12,27 @@ use Sastiam\CourseSolid\Utils\Logger;
 
 class App implements IApp {
 
-    private array $env;
-    private string $envName;
     private Logger $logger;
     private Environment $environment;
     private MysqlConnection $bdConnection;
 
     /**
-     * @param array $env
-     * @param string $envName
      * @param Environment $environment
      */
-    public function __construct(array $env, string $envName, Environment $environment)
+    public function __construct(Environment $environment)
     {
-        $this->env=$env;
-        $this->envName=$envName;
         $this->environment=$environment;
         $this->logger=new Logger();
     }
 
     /**
+     * @param array $env
+     * @param string $envName
      * @return string
      * @throws Exception
      */
-    function loadEnvironment(): string {
-        $environmentSaved = $this->environment->setEnvironment($this->envName, $this->env);
+    function loadEnvironment(array $env, string $envName): string {
+        $environmentSaved = $this->environment->setEnvironment($envName, $env);
         return $environmentSaved
             ? $this->logger->success()->format("Environment loaded and saved!")
             : $this->logger->failed()->format("Error has occurred when environment load");
@@ -65,6 +61,8 @@ class App implements IApp {
     {
         return $this->bdConnection;
     }
+
+
 }
 
 $envArgument = array(
@@ -74,11 +72,11 @@ $envArgument = array(
     "OPTIONS"=>[]
 );
 
-$initApp = new App($envArgument, "MYSQL_CREDENTIALS", new Environment());
+$initApp = new App(new Environment());
 echo "Iniciando App...\n";
-echo $initApp->loadEnvironment();
+echo $initApp->loadEnvironment($envArgument, "MYSQL_CREDENTIALS",);
 echo $initApp->loadDatabase();
 
 $user = new UserDB($initApp->getBdConnection());
 // echo $user->store(new UserModel(0, new DateTime(), "Alberto", "Francia"));
-print_r($user->all());
+print_r($user->getAll());

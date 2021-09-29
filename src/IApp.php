@@ -2,6 +2,6 @@
 
 interface IApp
 {
-    function loadEnvironment() : string;
+    function loadEnvironment(array $env, string $envName) : string;
     function loadDatabase(): string;
 }
