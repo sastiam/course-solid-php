@@ -1,17 +1,14 @@
 <?php namespace Sastiam\CourseSolid;
 require '../vendor/autoload.php';
 
+use DateTime;
 use Exception;
 use Sastiam\CourseSolid\Config\Environment;
-use Sastiam\CourseSolid\Db\DBEnum;
+use Sastiam\CourseSolid\DataAccess\UserDB\Mysql\UserDB;
 use Sastiam\CourseSolid\Db\Mysql\MysqlConnection;
+use Sastiam\CourseSolid\Models\User\UserModel;
 use Sastiam\CourseSolid\Utils\Logger;
 
-interface IApp
-{
-    function loadEnvironment() : string;
-    function loadDatabase(): string;
-}
 
 class App implements IApp {
 
@@ -19,7 +16,13 @@ class App implements IApp {
     private string $envName;
     private Logger $logger;
     private Environment $environment;
+    private MysqlConnection $bdConnection;
 
+    /**
+     * @param array $env
+     * @param string $envName
+     * @param Environment $environment
+     */
     public function __construct(array $env, string $envName, Environment $environment)
     {
         $this->env=$env;
@@ -46,13 +49,21 @@ class App implements IApp {
     function loadDatabase(): string {
         try {
             $loadEnvDatabase = $this->environment->getEnvironment("MYSQL_CREDENTIALS");
-            new MysqlConnection($loadEnvDatabase);
+            $this->bdConnection = new MysqlConnection($loadEnvDatabase);
 
             // echo var_dump($connectDatabase);
             return $this->logger->success()->format("Database connected!") ;
         } catch (Exception $e) {
             return $this->logger->failed()->format($e->getMessage());
         }
+    }
+
+    /**
+     * @return MysqlConnection
+     */
+    public function getBdConnection(): MysqlConnection
+    {
+        return $this->bdConnection;
     }
 }
 
@@ -67,3 +78,7 @@ $initApp = new App($envArgument, "MYSQL_CREDENTIALS", new Environment());
 echo "Iniciando App...\n";
 echo $initApp->loadEnvironment();
 echo $initApp->loadDatabase();
+
+$user = new UserDB($initApp->getBdConnection());
+// echo $user->store(new UserModel(0, new DateTime(), "Alberto", "Francia"));
+print_r($user->all());
