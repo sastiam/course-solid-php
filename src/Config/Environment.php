@@ -9,16 +9,8 @@ class Environment implements EnvironmentInterface {
      */
     private array $configEnvironment = [];
 
-    /**
-     * @param string $env
-     * @return array
-     */
     public function getEnvironment(string $env) : array
     {
-        // TODO: Implement getEnvironment() method.
-       // if(!$this->checkEnvironment($env))
-        //   throw new \Exception("Environment $env not found in environment file");
-
         return $this->configEnvironment[$env];
     }
 
